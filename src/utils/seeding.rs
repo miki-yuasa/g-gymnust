@@ -1,7 +1,7 @@
 use rand::SeedableRng;
 use rand_xoshiro::Xoshiro256Plus;
 
-type Generator = Xoshiro256Plus;
+pub type Generator = Xoshiro256Plus;
 
 /// Generate a random number generator and a seed.
 /// If a seed is not provided, the seed is generated from the OS entropy.
