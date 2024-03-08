@@ -19,7 +19,7 @@ pub struct Metadata {
 /// Note:
 ///     To get reproducible sampling of actions, a seed can be set with ``action_space.seed(seed)``.
 #[derive(Debug, Clone)]
-struct Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> {
+struct State<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> {
     pub action_space: ActSpace,
     pub observation_space: ObsSpace,
     pub spec: Option<EnvSpec<EnvSpecArgs, WrapperSpecArgs>>,
@@ -38,7 +38,7 @@ struct Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> {
 /// * `reset` - Reset the environment's state. Returns the initial observation.
 /// * `render` - Render the environment to help visualize what the agent see, example modes are human, rgb_array, ansi, etc.
 /// * `close` - Cleanup any resources.
-pub trait Dynamics<ObsType, ActType> {
+pub trait Env<ObsType, ActType> {
     /// Run one timestep of the environment's dynamics using the agent action.
     ///
     /// When the end of an episode is reached (``terminated`` or ``truncated``), ut us necessary to call `reset` to reset the environment's state for the next episode.
@@ -120,8 +120,8 @@ pub trait Dynamics<ObsType, ActType> {
 }
 
 #[allow(unused_variables)]
-impl<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> Dynamics<ObsSpace, ActSpace>
-    for Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs>
+impl<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> Env<ObsSpace, ActSpace>
+    for State<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs>
 {
     fn step<T>(&mut self, action: ActSpace) -> (ObsSpace, f32, bool, bool, T) {
         todo!()
