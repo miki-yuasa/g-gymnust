@@ -1,19 +1,25 @@
 use crate::envs::registration::EnvSpec;
 use crate::utils::seeding::{rs_random, Generator};
 
+#[derive(Debug, Clone)]
+pub struct Metadata {
+    render_modes: Vec<String>,
+    render_fps: Option<u32>,
+}
+
 /// The main Gymnust `Env` trait implementing Reinforcement Learning Agents environments.
 /// The structs that implement this trait need have additional attributes for users to understand the implementation.
 /// * `action_space` - The action space of the environment.
 /// * `observation_space` - The observation space of the environment.
 /// * `spec` - An environment specification that contains the information used to initialize the environment from `gymnust::make()`.
-/// * `metadata` - Additional information about the environment i.e. render modes, render fps, etc.
+/// * `metadata` - Additional information about the environment i.e. render modes, render fps.
 /// * `rs_random` - A random number generator and a seed that corresponds to `np_random` in Gymnasium.
 /// This is automatically assigned during `reset()` and when assessing `rs_random`.
 ///
 /// Note:
 ///     To get reproducible sampling of actions, a seed can be set with ``action_space.seed(seed)``.
 #[derive(Debug, Clone)]
-struct Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs, Metadata> {
+struct Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> {
     pub action_space: ActSpace,
     pub observation_space: ObsSpace,
     pub spec: Option<EnvSpec<EnvSpecArgs, WrapperSpecArgs>>,
@@ -71,7 +77,7 @@ pub trait Dynamics<ObsType, ActType> {
     /// * `observation` - The initial observation of the environment.
     /// * `info` - A dictionary containing additional information about the environment.
     #[allow(unused_variables)]
-    pub fn reset<Options, Info>(
+    fn reset<Options, Info>(
         &mut self,
         seed: Option<u32>,
         options: Option<Options>,
@@ -114,8 +120,8 @@ pub trait Dynamics<ObsType, ActType> {
 }
 
 #[allow(unused_variables)]
-impl<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs, Metadata> Dynamics<ObsSpace, ActSpace>
-    for Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs, Metadata>
+impl<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> Dynamics<ObsSpace, ActSpace>
+    for Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs>
 {
     fn step<T>(&mut self, action: ActSpace) -> (ObsSpace, f32, bool, bool, T) {
         todo!()
