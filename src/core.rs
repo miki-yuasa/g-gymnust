@@ -1,3 +1,5 @@
+use crate::utils::seeding::Generator;
+
 /// The main Gymnust `Env` trait implementing Reinforcement Learning Agents environments.
 /// The structs that implement this trait need have additional attributes for users to understand the implementation.
 /// * `action_space` - The action space of the environment.
