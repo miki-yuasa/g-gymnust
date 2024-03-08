@@ -24,3 +24,14 @@ pub fn rs_random(seed: Option<u32>) -> (Generator, u32) {
     // Return the seed and random generator
     (rng, rs_seed)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_rs_random() {
+        let (rng, seed) = rs_random(None);
+        assert_eq!(seed, seed);
+    }
+}
