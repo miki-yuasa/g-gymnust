@@ -1,5 +1,5 @@
 use crate::envs::registration::EnvSpec;
-use crate::utils::seeding::{rs_random, Generator};
+use crate::utils::seeding::Generator;
 
 #[derive(Debug, Clone)]
 pub struct Metadata {

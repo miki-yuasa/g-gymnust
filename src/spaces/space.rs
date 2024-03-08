@@ -1,10 +1,10 @@
-use crate::utils::seeding::{Generator, Seed};
+use crate::utils::seeding::Generator;
 /// Struct that is used to define observation and action spaces.
 #[derive(Debug, Clone)]
 pub struct Spacial {
     pub shape: Option<Vec<u32>>,
     pub dtype: Option<String>,
-    pub rs_random: Option<Seed>,
+    pub rs_random: Generator,
 }
 
 /// Spaces are crucially used in Gym to define the format of valid actions and observations.
