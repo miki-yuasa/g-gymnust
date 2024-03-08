@@ -3,18 +3,6 @@ use std::collections::HashMap;
 use crate::utils::seeding::{rs_random, Generator};
 
 /// The main Gymnust `Env` trait implementing Reinforcement Learning Agents environments.
-///
-/// The trait encapsulates an environment with arbitrary behind-the-scenes dynamics though the `step` and `reset` functions.
-/// An environment can be partially or fully observed by single agents.
-/// Multi-agent environments are future work.
-///
-/// The main API methods that users of this trait need to know are:
-/// * `step` - Run one timestep of the environment's dynamics.
-/// When end of episode is reached, you are responsible for calling `reset` to reset this environment's state.
-/// * `reset` - Reset the environment's state. Returns the initial observation.
-/// * `render` - Render the environment to help visualize what the agent see, example modes are human, rgb_array, ansi, etc.
-/// * `close` - Cleanup any resources.
-///
 /// The structs that implement this trait need have additional attributes for users to understand the implementation.
 /// * `action_space` - The action space of the environment.
 /// * `observation_space` - The observation space of the environment.
@@ -25,7 +13,25 @@ use crate::utils::seeding::{rs_random, Generator};
 ///
 /// Note:
 ///     To get reproducible sampling of actions, a seed can be set with ``action_space.seed(seed)``.
-pub trait Env<ObsType, ActType> {
+struct Env<ActSpace, ObsSpace> {
+    action_space: ActSpace,
+    observation_space: ObsSpace,
+    spec: Option<String>,
+    metadata: HashMap<String, String>,
+    rs_random: Option<Generator>,
+}
+
+/// The trait encapsulates an environment with arbitrary behind-the-scenes dynamics though the `step` and `reset` functions.
+/// An environment can be partially or fully observed by single agents.
+/// Multi-agent environments are future work.
+///
+/// The main API methods that users of this trait need to know are:
+/// * `step` - Run one timestep of the environment's dynamics.
+/// When end of episode is reached, you are responsible for calling `reset` to reset this environment's state.
+/// * `reset` - Reset the environment's state. Returns the initial observation.
+/// * `render` - Render the environment to help visualize what the agent see, example modes are human, rgb_array, ansi, etc.
+/// * `close` - Cleanup any resources.
+pub trait Dynamics<ObsType, ActType> {
     /// Run one timestep of the environment's dynamics using the agent action.
     ///
     /// When the end of an episode is reached (``terminated`` or ``truncated``), ut us necessary to call `reset` to reset the environment's state for the next episode.
@@ -68,11 +74,7 @@ pub trait Env<ObsType, ActType> {
         &mut self,
         seed: Option<u32>,
         options: Option<HashMap<String, T>>,
-    ) -> (ObsType, HashMap<String, T>) {
-        self._assign_randomness(seed);
-        (self._get_obs(), self._get_info())
-    }
-
+    ) -> (ObsType, HashMap<String, T>);
     /// Compute the render frame(s) as specified by the `render_mode` during initialization of the environment.
     ///
     /// The environment's :attr:`metadata` render modes (`env.metadata["render_modes"]`) should contain the possible  ways to implement the render modes.
@@ -104,46 +106,50 @@ pub trait Env<ObsType, ActType> {
     /// This method should be implemented to return `Self`.
     fn unwrapped(&self);
 
-    fn to_string(&self) -> String {
-        let spec = self._get_spec_id();
-        let out_str = match spec {
-            Some(spec) => format!("{}<{}>", std::any::type_name::<Self>(), spec),
-            None => format!("{}", std::any::type_name::<Self>()),
-        };
-        out_str
-    }
+    fn to_string(&self) -> String;
+    // {
+    //     let spec = self._get_spec_id();
+    //     let out_str = match spec {
+    //         Some(spec) => format!("{}<{}>", std::any::type_name::<Self>(), spec),
+    //         None => format!("{}", std::any::type_name::<Self>()),
+    //     };
+    //     out_str
+    // }
 
-    fn _get_spec_id(&self) -> Option<String>;
+    // fn _get_spec_id(&self) -> Option<String>;
 
-    fn rs_random_seed(&self) -> u32;
+    // fn rs_random_seed(&self) -> u32;
 
-    fn rs_random(&self) -> Generator;
+    // // fn rs_random(&self) -> Generator;
 
-    /// Get the observation of the current state.
-    fn _get_obs(&self) -> ObsType;
+    // /// Get the observation of the current state.
+    // fn _get_obs(&self) -> ObsType;
 
-    /// Get additional information about the current state.
-    fn _get_info<T>(&self) -> HashMap<String, T>;
+    // /// Get additional information about the current state.
+    // fn _get_info<T>(&self) -> HashMap<String, T>;
 
-    /// Set the PRNG
-    ///
-    /// # Arguments
-    /// * `rng` - A random number generator
-    fn _set_rs_random(&mut self, rng: Generator);
+    // /// Set the PRNG
+    // ///
+    // /// # Arguments
+    // /// * `rng` - A random number generator
+    // fn _set_rs_random(&mut self, rng: Generator);
 
-    /// Set the PRNG seed
-    ///
-    /// # Arguments
-    /// * `seed` - A seed for the random number generator
-    fn _set_rs_random_seed(&mut self, seed: u32);
+    // /// Set the PRNG seed
+    // ///
+    // /// # Arguments
+    // /// * `seed` - A seed for the random number generator
+    // fn _set_rs_random_seed(&mut self, seed: u32);
 
-    /// Assign a random number generator and seed to the environment.
-    ///
-    /// # Arguments
-    /// * `seed` - An optional seed for the random number generator
-    fn _assign_randomness(&mut self, seed: Option<u32>) {
-        let (mut rng, rs_seed) = rs_random(seed);
-        self._set_rs_random(rng);
-        self._set_rs_random_seed(rs_seed);
-    }
+    // /// Assign a random number generator and seed to the environment.
+    // ///
+    // /// # Arguments
+    // /// * `seed` - An optional seed for the random number generator
+    // fn _assign_randomness(&mut self, seed: Option<u32>) {
+    //     let (mut rng, rs_seed) = rs_random(seed);
+    //     self._set_rs_random(rng);
+    //     self._set_rs_random_seed(rs_seed);
+    // }
 }
+
+// To do: Implement the Dynamics trait for the Env struct
+// impl Dynamics for Env {}
