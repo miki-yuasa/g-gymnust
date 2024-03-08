@@ -53,7 +53,7 @@ pub trait Env<ObsType, ActType> {
     /// * `terminated` - A boolean indicating if the episode has ended.
     /// * `truncated` - A boolean indicating if the episode was truncated.
     /// * `info` - A dictionary containing additional information about the environment.
-    fn step<Info>(&mut self, action: ActType) -> (ObsType, f32, bool, bool, Info);
+    fn step<Info>(&mut self, action: ActType) -> (ObsType, f64, bool, bool, Info);
 
     /// Reset the environment to an initial internal state, returning an initial observation and info.
     ///
