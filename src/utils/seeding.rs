@@ -32,6 +32,11 @@ mod tests {
     #[test]
     fn test_rs_random() {
         let (rng, seed) = rs_random(None);
-        assert_eq!(seed, seed);
+        assert!(seed > 0);
+    }
+    #[test]
+    fn test_rs_random_1() {
+        let (rng, seed) = rs_random(Some(42));
+        assert_eq!(seed, 42);
     }
 }
