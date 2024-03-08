@@ -3,6 +3,11 @@ use rand_xoshiro::Xoshiro256Plus;
 
 pub type Generator = Xoshiro256Plus;
 
+pub enum Seed {
+    U32,
+    Generator,
+}
+
 /// Generate a random number generator and a seed.
 /// If a seed is not provided, the seed is generated from the OS entropy.
 ///
