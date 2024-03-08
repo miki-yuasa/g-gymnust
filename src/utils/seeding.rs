@@ -3,6 +3,7 @@ use rand_xoshiro::Xoshiro256Plus;
 
 pub type Generator = Xoshiro256Plus;
 
+#[derive(Debug, Clone, Copy)]
 pub enum Seed {
     U32,
     Generator,
