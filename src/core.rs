@@ -1,7 +1,3 @@
-use std::collections::HashMap;
-
-use crate::utils::seeding::{rs_random, Generator};
-
 /// The main Gymnust `Env` trait implementing Reinforcement Learning Agents environments.
 /// The structs that implement this trait need have additional attributes for users to understand the implementation.
 /// * `action_space` - The action space of the environment.
@@ -13,11 +9,11 @@ use crate::utils::seeding::{rs_random, Generator};
 ///
 /// Note:
 ///     To get reproducible sampling of actions, a seed can be set with ``action_space.seed(seed)``.
-struct Env<ActSpace, ObsSpace> {
+struct Env<ActSpace, ObsSpace, Metadata> {
     action_space: ActSpace,
     observation_space: ObsSpace,
     spec: Option<String>,
-    metadata: HashMap<String, String>,
+    metadata: Metadata,
     rs_random: Option<Generator>,
 }
 
@@ -46,7 +42,7 @@ pub trait Dynamics<ObsType, ActType> {
     /// * `terminated` - A boolean indicating if the episode has ended.
     /// * `truncated` - A boolean indicating if the episode was truncated.
     /// * `info` - A dictionary containing additional information about the environment.
-    fn step<T>(&mut self, action: ActType) -> (ObsType, f32, bool, bool, HashMap<String, T>);
+    fn step<T>(&mut self, action: ActType) -> (ObsType, f32, bool, bool, T);
 
     /// Reset the environment to an initial internal state, returning an initial observation and info.
     ///
@@ -70,11 +66,7 @@ pub trait Dynamics<ObsType, ActType> {
     /// * `observation` - The initial observation of the environment.
     /// * `info` - A dictionary containing additional information about the environment.
     #[allow(unused_variables)]
-    fn reset<T>(
-        &mut self,
-        seed: Option<u32>,
-        options: Option<HashMap<String, T>>,
-    ) -> (ObsType, HashMap<String, T>);
+    fn reset<T, U>(&mut self, seed: Option<u32>, options: Option<T>) -> (ObsType, U);
     /// Compute the render frame(s) as specified by the `render_mode` during initialization of the environment.
     ///
     /// The environment's :attr:`metadata` render modes (`env.metadata["render_modes"]`) should contain the possible  ways to implement the render modes.
