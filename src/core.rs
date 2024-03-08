@@ -4,7 +4,7 @@ use crate::utils::seeding::Generator;
 #[derive(Debug, Clone)]
 pub struct Metadata {
     render_modes: Vec<String>,
-    render_fps: Option<u32>,
+    render_fps: Option<usize>,
 }
 
 /// The main Gymnust `Env` trait implementing Reinforcement Learning Agents environments.
@@ -25,7 +25,7 @@ struct State<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> {
     pub spec: Option<EnvSpec<EnvSpecArgs, WrapperSpecArgs>>,
     pub metadata: Metadata,
     pub rs_random: Option<Generator>,
-    pub rs_random_seed: Option<u32>,
+    pub rs_random_seed: Option<usize>,
 }
 
 /// The trait encapsulates an environment with arbitrary behind-the-scenes dynamics though the `step` and `reset` functions.
@@ -81,7 +81,7 @@ pub trait Env<ObsType, ActType> {
     /// ```rust
     /// fn reset<Options, Info>(
     ///    &mut self,
-    ///   seed: Option<u32>,
+    ///   seed: Option<usize>,
     ///  options: Option<Options>,
     /// ) -> (ObsType, Info) {
     ///     let (mut rng, rs_seed) = rs_random(seed);
@@ -94,7 +94,7 @@ pub trait Env<ObsType, ActType> {
     #[allow(unused_variables)]
     fn reset<Options, Info>(
         &mut self,
-        seed: Option<u32>,
+        seed: Option<usize>,
         options: Option<Options>,
     ) -> (ObsType, Info);
 

@@ -2,7 +2,7 @@ use crate::{tensor::Device, utils::seeding::Generator};
 /// Struct that is used to define observation and action spaces.
 #[derive(Debug, Clone)]
 pub struct Spacial {
-    pub shape: Option<Vec<u32>>,
+    pub shape: Option<Vec<usize>>,
     pub dtype: Option<String>,
     pub rs_random: Generator,
     pub device: Option<Device>,
@@ -27,7 +27,7 @@ pub struct Spacial {
 pub trait Space<DType> {
     fn is_flattenable(&self) -> bool;
     fn sample<Mask>(&self, mask: Option<Mask>) -> DType;
-    fn seed(&mut self, seed: Option<u32>) -> Vec<u32>;
+    fn seed(&mut self, seed: Option<usize>) -> Vec<usize>;
     fn contains<T>(&self, x: T) -> bool;
 }
 

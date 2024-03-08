@@ -13,7 +13,7 @@ pub struct EnvSpec<EnvSpecArgs, WrapperSpecArgs> {
     pub reward_threshold: Option<f64>,
     pub nondeterministic: bool,
     // Wrapper
-    pub max_episode_steps: Option<u32>,
+    pub max_episode_steps: Option<usize>,
     pub order_enforce: bool,
     pub disable_env_checker: bool,
     // Environment arguments
@@ -21,7 +21,7 @@ pub struct EnvSpec<EnvSpecArgs, WrapperSpecArgs> {
     // Post-init attributes
     pub namespace: Option<String>,
     pub name: String,
-    pub version: Option<u32>,
+    pub version: Option<usize>,
     // Applied wrappers
     pub applied_wrappers: Option<Vec<WrapperSpec<WrapperSpecArgs>>>,
     // Todo: implement VectorEnvCreator

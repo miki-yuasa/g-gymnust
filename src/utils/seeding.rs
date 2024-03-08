@@ -12,9 +12,9 @@ pub type Generator = Xoshiro256Plus;
 /// # Returns
 /// * `rng` - A random number generator
 /// * `rs_seed` - The seed used to generate `rng``
-pub fn rs_random(seed: Option<u32>) -> (Generator, u32) {
+pub fn rs_random(seed: Option<usize>) -> (Generator, usize) {
     // if seed is None, used the entropy from the OS
-    let rs_seed: u32 = match seed {
+    let rs_seed: usize = match seed {
         Some(seed) => seed,
         None => rand::random(),
     };
