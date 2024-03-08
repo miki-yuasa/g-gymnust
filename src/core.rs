@@ -24,8 +24,8 @@ struct State<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> {
     pub observation_space: ObsSpace,
     pub spec: Option<EnvSpec<EnvSpecArgs, WrapperSpecArgs>>,
     pub metadata: Metadata,
-    _rs_random: Option<Generator>,
-    _rs_random_seed: Option<u32>,
+    pub rs_random: Option<Generator>,
+    pub rs_random_seed: Option<u32>,
 }
 
 /// The trait encapsulates an environment with arbitrary behind-the-scenes dynamics though the `step` and `reset` functions.
