@@ -1,4 +1,5 @@
-use crate::utils::seeding::Generator;
+use crate::envs::registration::EnvSpec;
+use crate::utils::seeding::{rs_random, Generator};
 
 /// The main Gymnust `Env` trait implementing Reinforcement Learning Agents environments.
 /// The structs that implement this trait need have additional attributes for users to understand the implementation.
@@ -11,12 +12,14 @@ use crate::utils::seeding::Generator;
 ///
 /// Note:
 ///     To get reproducible sampling of actions, a seed can be set with ``action_space.seed(seed)``.
-struct Env<ActSpace, ObsSpace, Metadata> {
-    action_space: ActSpace,
-    observation_space: ObsSpace,
-    spec: Option<String>,
-    metadata: Metadata,
-    rs_random: Option<Generator>,
+#[derive(Debug, Clone)]
+struct Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs, Metadata> {
+    pub action_space: ActSpace,
+    pub observation_space: ObsSpace,
+    pub spec: Option<EnvSpec<EnvSpecArgs, WrapperSpecArgs>>,
+    pub metadata: Metadata,
+    _rs_random: Option<Generator>,
+    _rs_random_seed: Option<u32>,
 }
 
 /// The trait encapsulates an environment with arbitrary behind-the-scenes dynamics though the `step` and `reset` functions.
@@ -44,7 +47,7 @@ pub trait Dynamics<ObsType, ActType> {
     /// * `terminated` - A boolean indicating if the episode has ended.
     /// * `truncated` - A boolean indicating if the episode was truncated.
     /// * `info` - A dictionary containing additional information about the environment.
-    fn step<T>(&mut self, action: ActType) -> (ObsType, f32, bool, bool, T);
+    fn step<Info>(&mut self, action: ActType) -> (ObsType, f32, bool, bool, Info);
 
     /// Reset the environment to an initial internal state, returning an initial observation and info.
     ///
@@ -68,7 +71,11 @@ pub trait Dynamics<ObsType, ActType> {
     /// * `observation` - The initial observation of the environment.
     /// * `info` - A dictionary containing additional information about the environment.
     #[allow(unused_variables)]
-    fn reset<T, U>(&mut self, seed: Option<u32>, options: Option<T>) -> (ObsType, U);
+    pub fn reset<Options, Info>(
+        &mut self,
+        seed: Option<u32>,
+        options: Option<Options>,
+    ) -> (ObsType, Info);
     /// Compute the render frame(s) as specified by the `render_mode` during initialization of the environment.
     ///
     /// The environment's :attr:`metadata` render modes (`env.metadata["render_modes"]`) should contain the possible  ways to implement the render modes.
@@ -98,52 +105,49 @@ pub trait Dynamics<ObsType, ActType> {
 
     /// Return the base non-wrapped environment.
     /// This method should be implemented to return `Self`.
-    fn unwrapped(&self);
+    fn unwrapped(&self) -> &Self {
+        self
+    }
 
+    /// Return a string representation of the environment.
     fn to_string(&self) -> String;
-    // {
-    //     let spec = self._get_spec_id();
-    //     let out_str = match spec {
-    //         Some(spec) => format!("{}<{}>", std::any::type_name::<Self>(), spec),
-    //         None => format!("{}", std::any::type_name::<Self>()),
-    //     };
-    //     out_str
-    // }
-
-    // fn _get_spec_id(&self) -> Option<String>;
-
-    // fn rs_random_seed(&self) -> u32;
-
-    // // fn rs_random(&self) -> Generator;
-
-    // /// Get the observation of the current state.
-    // fn _get_obs(&self) -> ObsType;
-
-    // /// Get additional information about the current state.
-    // fn _get_info<T>(&self) -> HashMap<String, T>;
-
-    // /// Set the PRNG
-    // ///
-    // /// # Arguments
-    // /// * `rng` - A random number generator
-    // fn _set_rs_random(&mut self, rng: Generator);
-
-    // /// Set the PRNG seed
-    // ///
-    // /// # Arguments
-    // /// * `seed` - A seed for the random number generator
-    // fn _set_rs_random_seed(&mut self, seed: u32);
-
-    // /// Assign a random number generator and seed to the environment.
-    // ///
-    // /// # Arguments
-    // /// * `seed` - An optional seed for the random number generator
-    // fn _assign_randomness(&mut self, seed: Option<u32>) {
-    //     let (mut rng, rs_seed) = rs_random(seed);
-    //     self._set_rs_random(rng);
-    //     self._set_rs_random_seed(rs_seed);
-    // }
 }
 
-// To do: Implement the Dynamics trait for the Env struct
-// impl Dynamics for Env {}
+#[allow(unused_variables)]
+impl<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs, Metadata> Dynamics<ObsSpace, ActSpace>
+    for Env<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs, Metadata>
+{
+    fn step<T>(&mut self, action: ActSpace) -> (ObsSpace, f32, bool, bool, T) {
+        todo!()
+    }
+
+    fn reset<Options, Info>(
+        &mut self,
+        seed: Option<u32>,
+        options: Option<Options>,
+    ) -> (ObsSpace, Info) {
+        let (mut rng, rs_seed) = rs_random(seed);
+        self._rs_random = Some(rng);
+        self._rs_random_seed = Some(rs_seed);
+        let obs: ObsSpace = todo!();
+        let info: Info = todo!();
+        (obs, info)
+    }
+
+    fn render<RenderFrame>(&self) -> Option<RenderFrame> {
+        todo!("Render the environment to help visualize what the agent see.")
+    }
+
+    fn close(&self) {
+        todo!("Close the environment and free resources.")
+    }
+
+    fn to_string(&self) -> String {
+        let spec = &self.spec;
+        let out_str = match spec {
+            Some(spec) => format!("{}<{}>", std::any::type_name::<Self>(), spec.id),
+            None => format!("{}", std::any::type_name::<Self>()),
+        };
+        out_str
+    }
+}
