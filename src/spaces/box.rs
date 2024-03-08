@@ -19,7 +19,7 @@ impl<DType> Space<DType> for Box {
         todo!()
     }
 
-    fn seed(&self, seed: Option<u32>) -> Vec<u32> {
+    fn seed(&mut self, seed: Option<u32>) -> Vec<u32> {
         let rs_seed;
         (self.rs_random, rs_seed) = rs_random(seed);
 

@@ -25,7 +25,7 @@ pub struct Spacial {
 ///     Moreover, some implementations of Reinforcement Learning algorithms might not handle custom spaces properly. Use custom spaces with care.
 pub trait Space<DType> {
     fn is_flattenable(&self) -> bool;
-    fn sample<Mask>(&self, mask: Mask) -> DType;
-    fn seed(&self, seed: Option<u32>) -> Vec<u32>;
+    fn sample<Mask>(&self, mask: Option<Mask>) -> DType;
+    fn seed(&mut self, seed: Option<u32>) -> Vec<u32>;
     fn contains<T>(&self, x: T) -> bool;
 }
