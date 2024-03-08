@@ -3,6 +3,11 @@ use rand_xoshiro::Xoshiro256Plus;
 
 pub type Generator = Xoshiro256Plus;
 
+pub enum Seed {
+    USize,
+    Generator,
+}
+
 /// Generate a random number generator and a seed.
 /// If a seed is not provided, the seed is generated from the OS entropy.
 ///
@@ -12,6 +17,7 @@ pub type Generator = Xoshiro256Plus;
 /// # Returns
 /// * `rng` - A random number generator
 /// * `rs_seed` - The seed used to generate `rng``
+#[allow(unused_mut)]
 pub fn rs_random(seed: Option<usize>) -> (Generator, usize) {
     // if seed is None, used the entropy from the OS
     let rs_seed: usize = match seed {
@@ -31,12 +37,12 @@ mod tests {
 
     #[test]
     fn test_rs_random() {
-        let (rng, seed) = rs_random(None);
+        let (_rng, seed) = rs_random(None);
         assert!(seed > 0);
     }
     #[test]
     fn test_rs_random_1() {
-        let (rng, seed) = rs_random(Some(42));
+        let (_rng, seed) = rs_random(Some(42));
         assert_eq!(seed, 42);
     }
 }

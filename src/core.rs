@@ -18,6 +18,7 @@ pub struct Metadata {
 ///
 /// Note:
 ///     To get reproducible sampling of actions, a seed can be set with ``action_space.seed(seed)``.
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 struct State<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> {
     pub action_space: ActSpace,
