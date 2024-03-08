@@ -1,10 +1,11 @@
-use crate::utils::seeding::Generator;
+use crate::{tensor::Device, utils::seeding::Generator};
 /// Struct that is used to define observation and action spaces.
 #[derive(Debug, Clone)]
 pub struct Spacial {
     pub shape: Option<Vec<u32>>,
     pub dtype: Option<String>,
     pub rs_random: Generator,
+    pub device: Option<Device>,
 }
 
 /// Spaces are crucially used in Gym to define the format of valid actions and observations.
@@ -28,4 +29,9 @@ pub trait Space<DType> {
     fn sample<Mask>(&self, mask: Option<Mask>) -> DType;
     fn seed(&mut self, seed: Option<u32>) -> Vec<u32>;
     fn contains<T>(&self, x: T) -> bool;
+}
+
+pub enum Bound {
+    F64,
+    Tensor,
 }
