@@ -76,12 +76,28 @@ pub trait Env<ObsType, ActType> {
     /// # Returns
     /// * `observation` - The initial observation of the environment.
     /// * `info` - A dictionary containing additional information about the environment.
+    ///
+    /// # Example
+    /// ```rust
+    /// fn reset<Options, Info>(
+    ///    &mut self,
+    ///   seed: Option<u32>,
+    ///  options: Option<Options>,
+    /// ) -> (ObsType, Info) {
+    ///     let (mut rng, rs_seed) = rs_random(seed);
+    ///     self._rs_random = Some(rng);
+    ///     self._rs_random_seed = Some(rs_seed);
+    ///     let obs: ObsType = todo!();
+    ///     let info: Info = todo!();
+    ///     (obs, info)
+    /// }
     #[allow(unused_variables)]
     fn reset<Options, Info>(
         &mut self,
         seed: Option<u32>,
         options: Option<Options>,
     ) -> (ObsType, Info);
+
     /// Compute the render frame(s) as specified by the `render_mode` during initialization of the environment.
     ///
     /// The environment's :attr:`metadata` render modes (`env.metadata["render_modes"]`) should contain the possible  ways to implement the render modes.
@@ -116,44 +132,22 @@ pub trait Env<ObsType, ActType> {
     }
 
     /// Return a string representation of the environment.
+    /// This method should be implemented to return a string representation of the environment.
+    ///
+    /// # Returns
+    /// * `out_str` - A string representation of the environment.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// fn to_string(&self) -> String {
+    ///     let spec = &self.spec;
+    ///     let out_str = match spec {
+    ///         Some(spec) => format!("{}<{}>", std::any::type_name::<Self>(), spec.id),
+    ///         None => format!("{}", std::any::type_name::<Self>()),
+    ///     };
+    ///     out_str
+    /// }
+    /// ````
     fn to_string(&self) -> String;
-}
-
-#[allow(unused_variables)]
-impl<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs> Env<ObsSpace, ActSpace>
-    for State<ActSpace, ObsSpace, EnvSpecArgs, WrapperSpecArgs>
-{
-    fn step<T>(&mut self, action: ActSpace) -> (ObsSpace, f32, bool, bool, T) {
-        todo!()
-    }
-
-    fn reset<Options, Info>(
-        &mut self,
-        seed: Option<u32>,
-        options: Option<Options>,
-    ) -> (ObsSpace, Info) {
-        let (mut rng, rs_seed) = rs_random(seed);
-        self._rs_random = Some(rng);
-        self._rs_random_seed = Some(rs_seed);
-        let obs: ObsSpace = todo!();
-        let info: Info = todo!();
-        (obs, info)
-    }
-
-    fn render<RenderFrame>(&self) -> Option<RenderFrame> {
-        todo!("Render the environment to help visualize what the agent see.")
-    }
-
-    fn close(&self) {
-        todo!("Close the environment and free resources.")
-    }
-
-    fn to_string(&self) -> String {
-        let spec = &self.spec;
-        let out_str = match spec {
-            Some(spec) => format!("{}<{}>", std::any::type_name::<Self>(), spec.id),
-            None => format!("{}", std::any::type_name::<Self>()),
-        };
-        out_str
-    }
 }
