@@ -1,9 +1,10 @@
-use crate::{tensor::Device, utils::seeding::Generator};
-/// Struct that is used to define observation and action spaces.
+use crate::tensor::{DType, Device};
+use crate::utils::seeding::Generator;
+/// Template struct that is used to define observation and action spaces.
 #[derive(Debug, Clone)]
 pub struct Spacial {
     pub shape: Option<Vec<usize>>,
-    pub dtype: Option<String>,
+    pub dtype: Option<DType>,
     pub rs_random: Generator,
     pub device: Option<Device>,
 }
