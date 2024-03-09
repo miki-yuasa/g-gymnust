@@ -40,7 +40,8 @@ impl Space<Tensor> for Box {
     }
 
     fn sample<T>(&self, mask: Option<T>) -> Tensor {
-        todo!()
+        let high = self.high.clone();
+        todo!("Consider using another crate for random exponential distributions")
     }
 
     fn seed(&mut self, seed: Option<usize>) -> Vec<usize> {
@@ -133,5 +134,7 @@ impl Box {
 
 /// Handle infinite bounds and broadcast at the same time if needed.
 fn _broadcast(value: Tensor) -> Tensor {
-    value.clamp(-f32::INFINITY, f32::INFINITY).unwrap()
+    value
+        .clamp(-f32::INFINITY + 2., f32::INFINITY - 2.)
+        .unwrap()
 }
