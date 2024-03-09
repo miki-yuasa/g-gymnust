@@ -4,8 +4,8 @@ use rand_xoshiro::Xoshiro256Plus;
 pub type Generator = Xoshiro256Plus;
 
 pub enum Seed {
-    USize,
-    Generator,
+    USize(usize),
+    Generator(Generator),
 }
 
 /// Generate a random number generator and a seed.
