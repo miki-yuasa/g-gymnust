@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 candle-core = { git = "https://github.com/huggingface/candle.git", version = "0.4.1", default-features = false }
+ndarray = "0.15.6"
 rand = "0.8.5"
 rand_xoshiro = "0.6.0"
 
