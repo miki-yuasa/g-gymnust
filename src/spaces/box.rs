@@ -1,6 +1,6 @@
 //! Implementation of a space that represents closed boxes in euclidean space.
+use crate::common::tensor::{DType, Device, Tensor};
 use crate::spaces::space::{Bound, Space};
-use crate::tensor::{DType, Device, Tensor};
 use crate::utils::seeding::{rs_random, Generator, Seed};
 
 fn _short_repr(arr: Tensor) -> String {
@@ -41,7 +41,10 @@ impl Space<Tensor> for Box {
 
     fn sample<T>(&self, mask: Option<T>) -> Tensor {
         let high = self.high.clone();
-        todo!("Consider using another crate for random exponential distributions")
+
+        // Making arrays which classify the coordinates  to interval type
+
+        todo!()
     }
 
     fn seed(&mut self, seed: Option<usize>) -> Vec<usize> {

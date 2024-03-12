@@ -1,4 +1,4 @@
-use crate::tensor::{DType, Device, Tensor};
+use crate::common::tensor::{DType, Device, Tensor};
 use crate::utils::seeding::Generator;
 /// Template struct that is used to define observation and action spaces.
 #[derive(Debug, Clone)]
@@ -34,5 +34,5 @@ pub trait Space<DType> {
 
 pub enum Bound {
     F64(f64),
-    Tensor(Tensor),
+    Array(Tensor),
 }
