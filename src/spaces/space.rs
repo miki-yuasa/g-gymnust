@@ -34,5 +34,5 @@ pub trait Space<DType> {
 
 pub enum Bound {
     F64(f64),
-    Array(Tensor),
+    Tensor(Tensor),
 }

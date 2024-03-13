@@ -1,4 +1,5 @@
 //! Implementation of a space that represents closed boxes in euclidean space.
+use crate::common::array::Array;
 use crate::common::tensor::{DType, Device, Tensor};
 use crate::spaces::space::{Bound, Space};
 use crate::utils::seeding::{rs_random, Generator, Seed};
@@ -40,8 +41,6 @@ impl Space<Tensor> for Box {
     }
 
     fn sample<T>(&self, mask: Option<T>) -> Tensor {
-        let high = self.high.clone();
-
         // Making arrays which classify the coordinates  to interval type
 
         todo!()
